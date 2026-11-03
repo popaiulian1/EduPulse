@@ -1,0 +1,48 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "ApiGatewayApplication",
+            "request": "launch",
+            "mainClass": "com.edupulse.gateway.ApiGatewayApplication",
+            "projectName": "api-gateway"
+        },
+        {
+            "type": "java",
+            "name": "AuthServiceApplication",
+            "request": "launch",
+            "mainClass": "com.edupulse.auth.AuthServiceApplication",
+            "projectName": "auth-service"
+        },
+        {
+            "type": "java",
+            "name": "DiscoveryServerApplication",
+            "request": "launch",
+            "mainClass": "com.edupulse.discovery.DiscoveryServerApplication",
+            "projectName": "discovery-server"
+        },
+        {
+            "type": "java",
+            "name": "IngestionServiceApplication",
+            "request": "launch",
+            "mainClass": "com.edupulse.ingestion.IngestionServiceApplication",
+            "projectName": "ingestion-service"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "All Services",
+            "configurations": [
+                "DiscoveryServerApplication",
+                "AuthServiceApplication",
+                "IngestionServiceApplication",
+                "ApiGatewayApplication"
+            ],
+            "stopAll": true
+        }
+    ]
+}
