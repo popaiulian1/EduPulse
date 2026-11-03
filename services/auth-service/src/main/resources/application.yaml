@@ -20,6 +20,11 @@ spring:
     create-schemas: true
     locations: classpath:db/migrations
 
+jwt:
+  public-key: file:./keys/public.pem
+  private-key: file:./keys/private.pem
+  expires-in: 1h
+
 server:
   port: 8090
 

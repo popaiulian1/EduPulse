@@ -16,7 +16,8 @@
             "name": "AuthServiceApplication",
             "request": "launch",
             "mainClass": "com.edupulse.auth.AuthServiceApplication",
-            "projectName": "auth-service"
+            "projectName": "auth-service",
+            "cwd": "${workspaceFolder}/services/auth-service"
         },
         {
             "type": "java",
@@ -44,5 +45,5 @@
             ],
             "stopAll": true
         }
-    ]
+    ],
 }

@@ -1,4 +1,4 @@
-package com.edupulse.auth;
+package com.edupulse.auth.controllers;
 
 import java.util.Map;
 
@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 class PingController {
 
-	@GetMapping("/ping")
-	Map<String, String> ping() {
-		return Map.of("service", "auth-service", "status", "ok");
-	}
+  @GetMapping("/ping")
+  Map<String, String> ping() {
+    return Map.of("service", "auth-service", "status", "ok");
+  }
 
 }

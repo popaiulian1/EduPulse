@@ -9,7 +9,7 @@ CREATE TABLE users (
     created_at    TIMESTAMPTZ  NOT NULL DEFAULT now(),
 
     CONSTRAINT uq_users_username UNIQUE (username),
-    CONSTRAINT ck_users_role CHECK (role IN ('ROLE_ADMIN', 'ROLE_USER'))
+    CONSTRAINT ck_users_role CHECK (role IN ('ROLE_ADMIN', 'ROLE_COMPLIANCE_OFFICER', 'ROLE_USER'))
 );
 
 CREATE INDEX idx_users_org_unit ON users (org_unit);
