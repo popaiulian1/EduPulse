@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: discovery-server
+
+server:
+  port: 8761
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    # Single standalone node for now; add a second peer for HA later.
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://localhost:8761/eureka

@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: false
+          routes:
+            - id: auth-service
+              uri: lb://auth-service
+              predicates:
+                - Path=/api/auth/**
+              filters:
+                - StripPrefix=2
+            - id: ingestion-service
+              uri: lb://ingestion-service
+              predicates:
+                - Path=/api/ingestion/**
+              filters:
+                - StripPrefix=2
+
+server:
+  port: 8080
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway

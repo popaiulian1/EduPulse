@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: ingestion-service
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB:edupulse}
+    username: ${POSTGRES_USER:edupulse}
+    password: ${POSTGRES_PASSWORD:edupulse}
+  jpa:
+    hibernate:
+      ddl-auto: none
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: llama3.2:3b
+      embedding:
+        options:
+          model: nomic-embed-text:v1.5
+
+server:
+  port: 8100
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

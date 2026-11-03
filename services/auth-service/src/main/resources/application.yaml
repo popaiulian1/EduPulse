@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: auth-service
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB:edupulse}
+    username: ${POSTGRES_USER:edupulse}
+    password: ${POSTGRES_PASSWORD:edupulse}
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+server:
+  port: 8090
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

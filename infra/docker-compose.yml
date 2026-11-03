@@ -1,0 +1,97 @@
+# EduPulse AI - dev infrastructure (Spring services run on the host during development)
+# Usage:  docker compose --env-file .env up -d
+name: edupulse
+
+services:
+  postgres:
+    image: pgvector/pgvector:0.8.7-pg16
+    container_name: edupulse-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-edupulse}
+      POSTGRES_USER: ${POSTGRES_USER:-edupulse}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-edupulse}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-edupulse} -d ${POSTGRES_DB:-edupulse}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  ollama:
+    image: ollama/ollama:0.40.14
+    container_name: edupulse-ollama
+    ports:
+      - "11434:11434"
+    environment:
+      OLLAMA_KEEP_ALIVE: 30m        # keep chat + embedding models resident in VRAM
+      OLLAMA_MAX_LOADED_MODELS: 2   # chat model + embedding model together
+    volumes:
+      - ollama:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # One-shot job: pulls the models into the ollama volume, then exits.
+  ollama-init:
+    image: ollama/ollama:0.40.14
+    container_name: edupulse-ollama-init
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        ollama pull ${OLLAMA_CHAT_MODEL:-llama3.2}
+        ollama pull ${OLLAMA_EMBED_MODEL:-nomic-embed-text}
+    restart: "no"
+
+  # Cross-encoder reranker served by llama.cpp (OpenAI/Jina-style /v1/rerank endpoint)
+  reranker:
+    image: ghcr.io/ggml-org/llama.cpp:server-cuda-b12063
+    container_name: edupulse-reranker
+    ports:
+      - "8081:8080"
+    # -hf downloads the GGUF from Hugging Face on first start and caches it in /root/.cache
+    command: >
+      -hf ${RERANKER_HF_MODEL:-gpustack/bge-reranker-v2-m3-GGUF:Q8_0}
+      --reranking --host 0.0.0.0 --port 8080 -ngl 99 -c 8192 -b 8192 -ub 8192
+    volumes:
+      - llamacpp-cache:/root/.cache
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  pgweb:
+    image: sosedoff/pgweb:0.17.0
+    container_name: edupulse-pgweb
+    environment:
+      PGWEB_DATABASE_URL: postgres://${POSTGRES_USER:-edupulse}:${POSTGRES_PASSWORD:-edupulse}@postgres:5432/${POSTGRES_DB:-edupulse}?sslmode=disable
+    ports:
+      - "8082:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  ollama:
+  llamacpp-cache:
