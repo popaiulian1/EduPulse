@@ -35,6 +35,6 @@ class TokenServiceTests {
     assertEquals("admin", jwt.getSubject());
     assertEquals(List.of("ROLE_ADMIN"), jwt.getClaimAsStringList("roles"));
     assertEquals("SCHOOL_1", jwt.getClaimAsString("orgUnit"));
-    assertEquals("http://localhost:8090", jwt.getIssuer().toString());
+    assertEquals("https://auth.api.edupulse", jwt.getIssuer().toString());
   }
 }
