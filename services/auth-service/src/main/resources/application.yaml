@@ -9,8 +9,16 @@ spring:
     username: ${POSTGRES_USER:edupulse}
     password: ${POSTGRES_PASSWORD:edupulse}
   jpa:
+    properties:
+      hibernate:
+        '[default_schema]': ${POSTGRES_SCHEMA:auth}
     hibernate:
       ddl-auto: none
+  flyway:
+    schemas: ${POSTGRES_SCHEMA:auth}
+    default-schema: ${POSTGRES_SCHEMA:auth}
+    create-schemas: true
+    locations: classpath:db/migrations
 
 server:
   port: 8090
