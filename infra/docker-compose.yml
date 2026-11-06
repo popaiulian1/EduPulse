@@ -1,5 +1,6 @@
 # EduPulse AI - dev infrastructure (Spring services run on the host during development)
-# Usage:  docker compose --env-file .env up -d
+# Usage:  docker compose --env-file .env up -d                 (postgres + pgweb)
+#         docker compose --env-file .env --profile ai up -d    (also ollama + reranker; needs NVIDIA GPU)
 name: edupulse
 
 services:
@@ -24,6 +25,7 @@ services:
   ollama:
     image: ollama/ollama:0.40.14
     container_name: edupulse-ollama
+    profiles: ["ai"]
     ports:
       - "127.0.0.1:11434:11434"
     environment:
@@ -48,6 +50,7 @@ services:
   ollama-init:
     image: ollama/ollama:0.40.14
     container_name: edupulse-ollama-init
+    profiles: ["ai"]
     depends_on:
       ollama:
         condition: service_healthy
@@ -64,6 +67,7 @@ services:
   reranker:
     image: ghcr.io/ggml-org/llama.cpp:server-cuda-b12063
     container_name: edupulse-reranker
+    profiles: ["ai"]
     ports:
       - "127.0.0.1:8081:8080"
     # -hf downloads the GGUF from Hugging Face on first start and caches it in /root/.cache
