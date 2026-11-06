@@ -11,7 +11,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-edupulse}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-edupulse}
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./postgres/init:/docker-entrypoint-initdb.d:ro
@@ -25,7 +25,7 @@ services:
     image: ollama/ollama:0.40.14
     container_name: edupulse-ollama
     ports:
-      - "11434:11434"
+      - "127.0.0.1:11434:11434"
     environment:
       OLLAMA_KEEP_ALIVE: 30m        # keep chat + embedding models resident in VRAM
       OLLAMA_MAX_LOADED_MODELS: 2   # chat model + embedding model together
@@ -65,7 +65,7 @@ services:
     image: ghcr.io/ggml-org/llama.cpp:server-cuda-b12063
     container_name: edupulse-reranker
     ports:
-      - "8081:8080"
+      - "127.0.0.1:8081:8080"
     # -hf downloads the GGUF from Hugging Face on first start and caches it in /root/.cache
     command: >
       -hf ${RERANKER_HF_MODEL:-gpustack/bge-reranker-v2-m3-GGUF:Q8_0}
@@ -86,7 +86,7 @@ services:
     environment:
       PGWEB_DATABASE_URL: postgres://${POSTGRES_USER:-edupulse}:${POSTGRES_PASSWORD:-edupulse}@postgres:5432/${POSTGRES_DB:-edupulse}?sslmode=disable
     ports:
-      - "8082:8081"
+      - "127.0.0.1:8082:8081"
     depends_on:
       postgres:
         condition: service_healthy
