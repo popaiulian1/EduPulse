@@ -1,1 +1,4 @@
 com.edupulse.common.logging.LoggingAutoConfiguration
+com.edupulse.common.security.JwtSettingsAutoConfiguration
+com.edupulse.common.security.JwtSecurityAutoConfiguration
+com.edupulse.common.docs.OpenApiAutoConfiguration

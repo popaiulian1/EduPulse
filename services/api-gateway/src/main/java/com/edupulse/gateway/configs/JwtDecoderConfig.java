@@ -9,12 +9,14 @@ import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder;
 import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.edupulse.common.security.JwtSettings;
+
 import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
 public class JwtDecoderConfig {
-  private final JwtProperties jwtProperties;
+  private final JwtSettings jwtSettings;
 
   @Bean
   @LoadBalanced
@@ -26,12 +28,12 @@ public class JwtDecoderConfig {
   ReactiveJwtDecoder jwtDecoder(@LoadBalanced WebClient.Builder builder) {
 
     NimbusReactiveJwtDecoder decoder = NimbusReactiveJwtDecoder
-        .withJwkSetUri("http://auth-service/.well-known/jwks.json")
+        .withJwkSetUri(jwtSettings.jwksUri())
         .jwsAlgorithm(SignatureAlgorithm.RS256)
         .webClient(builder.build())
         .build();
 
-    decoder.setJwtValidator(JwtValidators.createDefaultWithIssuer(jwtProperties.issuer()));
+    decoder.setJwtValidator(JwtValidators.createDefaultWithIssuer(jwtSettings.issuer()));
 
     return decoder;
   }

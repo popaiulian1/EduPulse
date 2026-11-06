@@ -1,5 +1,6 @@
 package com.edupulse.auth.configs;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -9,39 +10,36 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+
+import com.edupulse.common.docs.DocsPaths;
 
 @Configuration
 @EnableMethodSecurity
 class SecurityConfig {
 
   @Bean
-  SecurityFilterChain securityFilterChain(HttpSecurity http) {
+  SecurityFilterChain securityFilterChain(HttpSecurity http,
+      JwtAuthenticationConverter jwtAuthenticationConverter,
+      @Value("${springdoc.api-docs.enabled:false}") boolean docsEnabled) {
     return http
         .csrf(AbstractHttpConfigurer::disable)
         .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/login", "/.well-known/jwks.json", "/actuator/health").permitAll()
-            .anyRequest().authenticated())
+        .authorizeHttpRequests(auth -> {
+          auth.requestMatchers("/login", "/.well-known/jwks.json", "/actuator/health").permitAll();
+          if (docsEnabled) {
+            auth.requestMatchers(DocsPaths.SERVICE).permitAll();
+          }
+          auth.anyRequest().authenticated();
+        })
         .oauth2ResourceServer(oauth2 -> oauth2
-            .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
+            .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)))
         .build();
   }
 
   @Bean
   JwtDecoder jwtDecoder(JwtProperties props) {
     return NimbusJwtDecoder.withPublicKey(props.publicKey()).build();
-  }
-
-  private JwtAuthenticationConverter jwtAuthenticationConverter() {
-    JwtGrantedAuthoritiesConverter authorities = new JwtGrantedAuthoritiesConverter();
-    authorities.setAuthoritiesClaimName("roles");
-    authorities.setAuthorityPrefix("");
-
-    JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
-    converter.setJwtGrantedAuthoritiesConverter(authorities);
-    return converter;
   }
 
 }

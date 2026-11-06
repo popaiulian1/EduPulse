@@ -26,6 +26,17 @@ jwt:
   private-key: file:./keys/private.pem
   expires-in: 1h
 
+# API docs: off by default, the dev launch configurations switch them on.
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+edupulse:
+  docs:
+    server-url: /api/auth
+
 server:
   port: 8090
 

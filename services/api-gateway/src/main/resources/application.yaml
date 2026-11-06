@@ -25,6 +25,19 @@ spring:
 jwt:
   issuer: https://auth.api.edupulse
 
+# API docs: off by default, the dev launch configurations switch them on.
+# The gateway's Swagger UI lists the docs of the services behind it.
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+    urls:
+      - name: auth-service
+        url: /api/auth/v3/api-docs
+      - name: ingestion-service
+        url: /api/ingestion/v3/api-docs
+
 server:
   port: 8080
 

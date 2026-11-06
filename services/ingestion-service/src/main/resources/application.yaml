@@ -1,6 +1,10 @@
 spring:
   application:
     name: ingestion-service
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
   threads:
     virtual:
       enabled: true
@@ -9,17 +13,48 @@ spring:
     username: ${POSTGRES_USER:edupulse}
     password: ${POSTGRES_PASSWORD:edupulse}
   jpa:
+    properties:
+      hibernate:
+        '[default_schema]': ingestion
     hibernate:
       ddl-auto: none
+  flyway:
+    schemas: ingestion
+    default-schema: ingestion
+    create-schemas: true
+    locations: classpath:db/migrations
   ai:
+    vectorstore:
+      pgvector:
+        schema-name: ingestion
+        table-name: vector_store
+        dimensions: 768
+        index-type: HNSW
+        distance-type: cosine-distance
+        initialize-schema: false
+        schema-validation: true
     ollama:
       base-url: http://localhost:11434
       chat:
-        options:
-          model: llama3.2:3b
+        model: llama3.2:3b
       embedding:
-        options:
-          model: nomic-embed-text:v1.5
+        model: nomic-embed-text:v1.5
+
+jwt:
+  issuer: https://auth.api.edupulse
+
+# API docs: off by default, the dev launch configurations switch them on.
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+edupulse:
+  storage:
+    root: ${EDUPULSE_STORAGE_ROOT:./uploads}
+  docs:
+    server-url: /api/ingestion
 
 server:
   port: 8100

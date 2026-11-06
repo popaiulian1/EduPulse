@@ -10,7 +10,11 @@
             "request": "launch",
             "mainClass": "com.edupulse.gateway.ApiGatewayApplication",
             "projectName": "api-gateway",
-            "env": { "EDUPULSE_LOG_ROOT": "${workspaceFolder}/logs" }
+            "env": {
+                "EDUPULSE_LOG_ROOT": "${workspaceFolder}/logs",
+                "SPRINGDOC_API_DOCS_ENABLED": "true",
+                "SPRINGDOC_SWAGGER_UI_ENABLED": "true"
+            }
         },
         {
             "type": "java",
@@ -18,7 +22,11 @@
             "request": "launch",
             "mainClass": "com.edupulse.auth.AuthServiceApplication",
             "projectName": "auth-service",
-            "env": { "EDUPULSE_LOG_ROOT": "${workspaceFolder}/logs" },
+            "env": {
+                "EDUPULSE_LOG_ROOT": "${workspaceFolder}/logs",
+                "SPRINGDOC_API_DOCS_ENABLED": "true",
+                "SPRINGDOC_SWAGGER_UI_ENABLED": "true"
+            },
             "cwd": "${workspaceFolder}/services/auth-service"
         },
         {
@@ -35,7 +43,12 @@
             "request": "launch",
             "mainClass": "com.edupulse.ingestion.IngestionServiceApplication",
             "projectName": "ingestion-service",
-            "env": { "EDUPULSE_LOG_ROOT": "${workspaceFolder}/logs" }
+            "env": {
+                "EDUPULSE_LOG_ROOT": "${workspaceFolder}/logs",
+                "EDUPULSE_STORAGE_ROOT": "${workspaceFolder}/uploads",
+                "SPRINGDOC_API_DOCS_ENABLED": "true",
+                "SPRINGDOC_SWAGGER_UI_ENABLED": "true"
+            }
         }
     ],
     "compounds": [

@@ -11,6 +11,5 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 public record JwtProperties(
     RSAPublicKey publicKey,
     RSAPrivateKey privateKey,
-    @DefaultValue("1h") Duration expiresIn,
-    String issuer) {
+    @DefaultValue("1h") Duration expiresIn) {
 }

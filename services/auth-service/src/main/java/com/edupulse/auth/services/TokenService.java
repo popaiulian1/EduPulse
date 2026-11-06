@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.edupulse.auth.configs.JwtProperties;
 import com.edupulse.auth.entities.AppUser;
+import com.edupulse.common.security.JwtSettings;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,12 +21,13 @@ import lombok.RequiredArgsConstructor;
 public class TokenService {
   private final JwtEncoder jwtEncoder;
   private final JwtProperties jwtProperties;
+  private final JwtSettings jwtSettings;
 
   public String generate(AppUser user) {
     Instant now = Instant.now();
 
     JwtClaimsSet claims = JwtClaimsSet.builder()
-        .issuer(jwtProperties.issuer())
+        .issuer(jwtSettings.issuer())
         .subject(user.getUsername())
         .issuedAt(now)
         .expiresAt(now.plus(jwtProperties.expiresIn()))
