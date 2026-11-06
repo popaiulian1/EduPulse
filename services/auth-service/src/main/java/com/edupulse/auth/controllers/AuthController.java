@@ -13,9 +13,12 @@ import com.edupulse.auth.services.TokenService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
@@ -27,6 +30,9 @@ public class AuthController {
 
   @PostMapping("/login")
   public LoginResponse login(@Valid @RequestBody LoginRequest request) {
+
+    log.info("Login attempt for user {}", request.username());
+
     authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(request.username(), request.password()));
 

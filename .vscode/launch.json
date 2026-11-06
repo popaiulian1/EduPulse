@@ -9,7 +9,8 @@
             "name": "ApiGatewayApplication",
             "request": "launch",
             "mainClass": "com.edupulse.gateway.ApiGatewayApplication",
-            "projectName": "api-gateway"
+            "projectName": "api-gateway",
+            "env": { "EDUPULSE_LOG_ROOT": "${workspaceFolder}/logs" }
         },
         {
             "type": "java",
@@ -17,6 +18,7 @@
             "request": "launch",
             "mainClass": "com.edupulse.auth.AuthServiceApplication",
             "projectName": "auth-service",
+            "env": { "EDUPULSE_LOG_ROOT": "${workspaceFolder}/logs" },
             "cwd": "${workspaceFolder}/services/auth-service"
         },
         {
@@ -24,14 +26,16 @@
             "name": "DiscoveryServerApplication",
             "request": "launch",
             "mainClass": "com.edupulse.discovery.DiscoveryServerApplication",
-            "projectName": "discovery-server"
+            "projectName": "discovery-server",
+            "env": { "EDUPULSE_LOG_ROOT": "${workspaceFolder}/logs" }
         },
         {
             "type": "java",
             "name": "IngestionServiceApplication",
             "request": "launch",
             "mainClass": "com.edupulse.ingestion.IngestionServiceApplication",
-            "projectName": "ingestion-service"
+            "projectName": "ingestion-service",
+            "env": { "EDUPULSE_LOG_ROOT": "${workspaceFolder}/logs" }
         }
     ],
     "compounds": [

@@ -89,6 +89,12 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-flyway</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>com.edupulse</groupId>
+      <artifactId>common</artifactId>
+    </dependency>
+    
 	</dependencies>
 
 	<build>

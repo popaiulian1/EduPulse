@@ -52,6 +52,12 @@
 			<artifactId>reactor-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+    <dependency>
+      <groupId>com.edupulse</groupId>
+      <artifactId>common</artifactId>
+    </dependency>
+
 	</dependencies>
 
 	<build>
