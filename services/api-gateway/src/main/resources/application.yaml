@@ -22,6 +22,9 @@ spring:
               filters:
                 - StripPrefix=2
 
+jwt:
+  issuer: https://auth.api.edupulse
+
 server:
   port: 8080
 

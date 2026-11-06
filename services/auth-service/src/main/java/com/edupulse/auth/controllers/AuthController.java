@@ -5,8 +5,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.RestController;
 
 import com.edupulse.auth.configs.JwtProperties;
-import com.edupulse.auth.dto.LoginRequest;
-import com.edupulse.auth.dto.LoginResponse;
+import com.edupulse.auth.dtos.LoginRequest;
+import com.edupulse.auth.dtos.LoginResponse;
 import com.edupulse.auth.entities.AppUser;
 import com.edupulse.auth.repositories.UserRepository;
 import com.edupulse.auth.services.TokenService;

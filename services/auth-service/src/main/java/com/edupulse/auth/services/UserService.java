@@ -3,7 +3,7 @@ package com.edupulse.auth.services;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.edupulse.auth.dto.CreateUserRequest;
+import com.edupulse.auth.dtos.CreateUserRequest;
 import com.edupulse.auth.entities.AppUser;
 import com.edupulse.auth.exceptions.UsernameAlreadyExistsException;
 import com.edupulse.auth.repositories.UserRepository;

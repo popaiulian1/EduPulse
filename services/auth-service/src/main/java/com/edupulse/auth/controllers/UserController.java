@@ -2,8 +2,8 @@ package com.edupulse.auth.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.edupulse.auth.dto.CreateUserRequest;
-import com.edupulse.auth.dto.UserResponse;
+import com.edupulse.auth.dtos.CreateUserRequest;
+import com.edupulse.auth.dtos.UserResponse;
 import com.edupulse.auth.entities.AppUser;
 import com.edupulse.auth.services.UserService;
 

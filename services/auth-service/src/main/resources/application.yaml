@@ -21,6 +21,7 @@ spring:
     locations: classpath:db/migrations
 
 jwt:
+  issuer: https://auth.api.edupulse
   public-key: file:./keys/public.pem
   private-key: file:./keys/private.pem
   expires-in: 1h

@@ -1,4 +1,4 @@
-package com.edupulse.auth.dto;
+package com.edupulse.auth.dtos;
 
 import java.time.Instant;
 import java.util.UUID;

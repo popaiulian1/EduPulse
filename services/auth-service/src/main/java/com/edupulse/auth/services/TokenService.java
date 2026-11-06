@@ -25,7 +25,7 @@ public class TokenService {
     Instant now = Instant.now();
 
     JwtClaimsSet claims = JwtClaimsSet.builder()
-        .issuer("https://auth.api.edupulse")
+        .issuer(jwtProperties.issuer())
         .subject(user.getUsername())
         .issuedAt(now)
         .expiresAt(now.plus(jwtProperties.expiresIn()))
