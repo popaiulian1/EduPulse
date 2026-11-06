@@ -9,6 +9,7 @@ import com.edupulse.auth.services.UserService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -24,6 +26,7 @@ public class UserController {
   @PostMapping("/users")
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<UserResponse> create(@Valid @RequestBody CreateUserRequest request) {
+    log.info("Create a user requested by: {}", request.username());
     AppUser created = userService.create(request);
     return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.from(created));
   }

@@ -36,6 +36,8 @@ public class AuthController {
     authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(request.username(), request.password()));
 
+    log.info("Login succeeded for user {}", request.username());
+
     AppUser user = userRepository.findByUsername(request.username()).orElseThrow();
 
     return new LoginResponse(
