@@ -23,6 +23,7 @@
 		<module>api-gateway</module>
 		<module>auth-service</module>
 		<module>ingestion-service</module>
+		<module>rag-query-service</module>
 	</modules>
 
 	<properties>

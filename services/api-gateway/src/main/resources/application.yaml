@@ -21,6 +21,12 @@ spring:
                 - Path=/api/ingestion/**
               filters:
                 - StripPrefix=2
+            - id: rag-query-service
+              uri: lb://rag-query-service
+              predicates:
+                - Path=/api/rag/**
+              filters:
+                - StripPrefix=2
 
 jwt:
   issuer: https://auth.api.edupulse
@@ -37,6 +43,8 @@ springdoc:
         url: /api/auth/v3/api-docs
       - name: ingestion-service
         url: /api/ingestion/v3/api-docs
+      - name: rag-query-service
+        url: /api/rag/v3/api-docs
 
 server:
   port: 8080

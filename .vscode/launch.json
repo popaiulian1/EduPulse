@@ -49,6 +49,18 @@
                 "SPRINGDOC_API_DOCS_ENABLED": "true",
                 "SPRINGDOC_SWAGGER_UI_ENABLED": "true"
             }
+        },
+        {
+            "type": "java",
+            "name": "RagQueryServiceApplication",
+            "request": "launch",
+            "mainClass": "com.edupulse.rag.RagQueryServiceApplication",
+            "projectName": "rag-query-service",
+            "env": {
+                "EDUPULSE_LOG_ROOT": "${workspaceFolder}/logs",
+                "SPRINGDOC_API_DOCS_ENABLED": "true",
+                "SPRINGDOC_SWAGGER_UI_ENABLED": "true"
+            }
         }
     ],
     "compounds": [
@@ -58,6 +70,7 @@
                 "DiscoveryServerApplication",
                 "AuthServiceApplication",
                 "IngestionServiceApplication",
+                "RagQueryServiceApplication",
                 "ApiGatewayApplication"
             ],
             "stopAll": true

@@ -55,6 +55,9 @@ edupulse:
     root: ${EDUPULSE_STORAGE_ROOT:./uploads}
   docs:
     server-url: /api/ingestion
+  chunking:
+    parent-tokens: 1000
+    child-tokens: 200
 
 server:
   port: 8100

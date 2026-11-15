@@ -1,0 +1,64 @@
+spring:
+  application:
+    name: rag-query-service
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB:edupulse}
+    username: ${POSTGRES_USER:edupulse}
+    password: ${POSTGRES_PASSWORD:edupulse}
+  ai:
+    vectorstore:
+      pgvector:
+        # The chunks are written by ingestion-service; this service only reads them.
+        schema-name: ingestion
+        table-name: vector_store
+        dimensions: 768
+        index-type: HNSW
+        distance-type: cosine-distance
+        initialize-schema: false
+        schema-validation: true
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: llama3.2:3b
+      embedding:
+        model: nomic-embed-text:v1.5
+
+jwt:
+  issuer: https://auth.api.edupulse
+
+# API docs: off by default, the dev launch configurations switch them on.
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+edupulse:
+  docs:
+    server-url: /api/rag
+  search:
+    multi-query:
+      # The LLM rewrites the question into a few variations; each is searched in parallel.
+      enabled: true
+      variations: 3
+      timeout: 3s
+  rerank:
+    enabled: true
+    url: http://localhost:8081
+    model: bge-reranker-v2-m3
+    candidates: 20
+    # Relevance below this (0 to 1) is dropped. In a first test, answers scored 0.2 to 0.94 and
+    # unrelated passages 0.00002 to 0.016, so 0.05 sits in the gap. Re-check on real documents.
+    min-score: 0.05
+    timeout: 10s
+
+server:
+  port: 8110
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
