@@ -19,6 +19,8 @@ class SecurityRulesConfig {
   RequestAuthorizationRules documentUploadRules() {
     return registry -> registry
         .requestMatchers(HttpMethod.POST, "/documents")
-        .hasAnyAuthority("ROLE_ADMIN", "ROLE_COMPLIANCE_OFFICER");
+        .hasAnyAuthority("ROLE_ADMIN", "ROLE_COMPLIANCE_OFFICER")
+        .requestMatchers(HttpMethod.DELETE, "/documents/*")
+        .hasAuthority("ROLE_ADMIN");
   }
 }

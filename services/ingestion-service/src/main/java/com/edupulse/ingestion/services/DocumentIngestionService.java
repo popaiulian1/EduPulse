@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.edupulse.ingestion.entities.DocumentStatus;
 import com.edupulse.ingestion.entities.UploadedDocument;
+import com.edupulse.ingestion.exceptions.DocumentBusyException;
 import com.edupulse.ingestion.exceptions.DocumentNotFoundException;
 import com.edupulse.ingestion.exceptions.UnsupportedDocumentException;
 import com.edupulse.ingestion.repositories.UploadedDocumentRepository;
@@ -67,6 +68,25 @@ public class DocumentIngestionService {
     // other org units get the same 404 as a missing id, so existence is not
     // revealed
     return repository.findByIdAndOrgUnit(id, orgUnit).orElseThrow(DocumentNotFoundException::new);
+  }
+
+  /**
+   * Removes a document completely. The stores cannot share a transaction, so the order matters:
+   * vectors first, then the file, and the database row last. If a step fails the row still exists,
+   * the admin can retry, and every step is idempotent so the retry finishes the cleanup. The
+   * parent chunks go with the row (ON DELETE CASCADE).
+   */
+  public void delete(UUID id, String orgUnit, String deletedBy) throws IOException {
+    UploadedDocument document = get(id, orgUnit);
+    if (document.getStatus() == DocumentStatus.PENDING || document.getStatus() == DocumentStatus.PROCESSING) {
+      // ingestion could re-add chunks after they were cleared
+      throw new DocumentBusyException();
+    }
+
+    chunkVectorStore.deleteByDocument(id);
+    storage.delete(id);
+    repository.delete(document);
+    log.info("Document {} ({}) deleted by {} for {}", id, document.getFilename(), deletedBy, orgUnit);
   }
 
   private void process(UploadedDocument document, DocumentType type, Path stored) {

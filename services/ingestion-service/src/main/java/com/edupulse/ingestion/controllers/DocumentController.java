@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,5 +42,13 @@ class DocumentController {
   @GetMapping("/{id}")
   DocumentResponse get(@PathVariable UUID id, @AuthenticationPrincipal Jwt jwt) {
     return DocumentResponse.from(ingestionService.get(id, TokenClaims.orgUnit(jwt)));
+  }
+
+  @DeleteMapping("/{id}")
+  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+  ResponseEntity<Void> delete(@PathVariable UUID id, @AuthenticationPrincipal Jwt jwt)
+      throws IOException {
+    ingestionService.delete(id, TokenClaims.orgUnit(jwt), jwt.getSubject());
+    return ResponseEntity.noContent().build();
   }
 }

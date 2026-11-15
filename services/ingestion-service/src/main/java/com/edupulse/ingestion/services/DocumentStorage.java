@@ -28,4 +28,9 @@ public class DocumentStorage {
     file.transferTo(target);
     return target;
   }
+
+  /** Idempotent: a file that is already gone is not an error, so a retried delete can finish. */
+  public void delete(UUID id) throws IOException {
+    Files.deleteIfExists(root.resolve(id.toString()));
+  }
 }

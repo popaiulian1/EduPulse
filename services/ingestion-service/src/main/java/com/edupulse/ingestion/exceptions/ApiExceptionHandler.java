@@ -17,4 +17,9 @@ class ApiExceptionHandler {
   ProblemDetail handleNotFound(DocumentNotFoundException ex) {
     return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
   }
+
+  @ExceptionHandler(DocumentBusyException.class)
+  ProblemDetail handleBusy(DocumentBusyException ex) {
+    return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+  }
 }
